@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "266933135139",
+    "firebase_url": "https://twoj-ogrod.firebaseio.com",
+    "project_id": "twoj-ogrod",
+    "storage_bucket": "twoj-ogrod.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:266933135139:android:71271e4ff79ac92dc60e96",
+        "android_client_info": {
+          "package_name": "com.example.twjogrd"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "266933135139-ppmq9u7ah3dc8n4vsm9n3lqtvmajpkni.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.twjogrd",
+            "certificate_hash": "5ca68840a6c177e1895fd6905e33e863626751b3"
+          }
+        },
+        {
+          "client_id": "266933135139-ir7updm4o37al4mov81rp1rag34616r1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAnizPn0HurKemuOyKNaAdObk8LbVcghcE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "266933135139-ir7updm4o37al4mov81rp1rag34616r1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

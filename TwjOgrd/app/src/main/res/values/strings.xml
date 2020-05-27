@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Twój Ogród</string>
+    <string name="has_o">Hasło</string>
+    <string name="adres_email">Adres email</string>
+    <string name="zatwierd">Zatwierdź</string>
+    <string name="ju_zarejestrowany_kliknij_tutaj_aby_si_zalogowa">Już zarejestrowany? Kliknij tutaj aby się zalogować</string>
+    <string name="zaloguj_si">Zaloguj się</string>
+    <string name="zarejestruj_si">Zarejestruj się</string>
+    <string name="zaloguj">Zaloguj</string>
+    <string name="wyloguj">Wyloguj</string>
+    <string name="textview">TextView</string>
+    <string name="rejestracja">Rejestracja</string>
+    <string name="twoje_ro_liny">Twoje rośliny</string>
+    <string name="dodaj_do_bazy">Dodaj do bazy</string>
+    <string name="nazwa_ro_liny">Nazwa rośliny</string>
+    <string name="dodaj">Dodaj</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="nazwa_polska">Nazwa polska</string>
+    <string name="nazwa_aci_ska">Nazwa łacińska</string>
+</resources>
