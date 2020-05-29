@@ -84,9 +84,6 @@ public class AddPlantActivity extends AppCompatActivity implements View.OnClickL
             }
         };
 
-
-
-
         recyclerView.setAdapter(adapter);
 
         backButton.setOnClickListener(this);

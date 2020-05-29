@@ -29,7 +29,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private TextView textViewSignin;
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
-    private DatabaseReference ref;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,12 +51,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         textViewSignin = (TextView) findViewById(R.id.textView);
         registerButton.setOnClickListener(this);
         textViewSignin.setOnClickListener(this);
-        ref = FirebaseDatabase.getInstance().getReference().child("users");
 
     }
 
     private void registerUser(){
-        String email = editTextEmail.getText().toString().trim();
+        final String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
 
         //checking if the password or email is empty
@@ -85,6 +84,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         if(task.isSuccessful()){
                             //user successfully registered and logged in
                             //we will start profile activity here and display a toast
+                            //We will store user email in database
+
+                            User user = new User(email);
+                            FirebaseDatabase.getInstance().getReference("Users")
+                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                    .setValue(user);
+
                             Toast.makeText(RegisterActivity.this, "Zarejestrowano!", Toast.LENGTH_SHORT).show();
                             finish();
                             startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
