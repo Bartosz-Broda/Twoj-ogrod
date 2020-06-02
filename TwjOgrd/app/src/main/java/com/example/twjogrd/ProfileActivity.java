@@ -17,6 +17,14 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -25,6 +33,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private TextView textViewEmail;
     private Button logoutButton;
     private ImageButton plusButton;
+    private DatabaseReference userPlants;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -49,12 +58,36 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         logoutButton.setOnClickListener(this);
         plusButton.setOnClickListener(this);
+
+        userPlants = FirebaseDatabase.getInstance().getReference("Users")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+        userPlants.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<String> plantList = new ArrayList<String>();
+                DataSnapshot plantsSnapshot = dataSnapshot.child("User_plants");
+                Iterable<DataSnapshot> userPlantsChildren = plantsSnapshot.getChildren();
+                for (DataSnapshot plant : userPlantsChildren)
+                {
+                    plantList.add(plant.getKey());
+                }
+                System.out.println(plantList);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(ProfileActivity.this, "Błąd bazy danych", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
     public void onClick(View v) {
         if(v == plusButton){
             FirebaseUser user = firebaseAuth.getCurrentUser();
+            assert user != null;
             if (user.getEmail().equals("mlodszybro@wp.pl")){
                 startActivity(new Intent(this, AddPlantExtendedActivity.class));
             }

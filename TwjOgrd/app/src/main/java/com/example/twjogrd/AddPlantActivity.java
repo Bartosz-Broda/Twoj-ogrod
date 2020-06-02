@@ -12,9 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -61,17 +63,23 @@ public class AddPlantActivity extends AppCompatActivity implements View.OnClickL
 
         adapter = new FirebaseRecyclerAdapter<DataSetFire, FirebaseViewHolder>(options) {
             @Override
-            protected void onBindViewHolder(@NonNull FirebaseViewHolder holder, int position, @NonNull final DataSetFire model) {
+            protected void onBindViewHolder(@NonNull final FirebaseViewHolder holder, int position, @NonNull final DataSetFire model) {
 
                 holder.namepol.setText(model.getNazwa());
                 holder.namelat.setText(model.getNazwa_lac());
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(AddPlantActivity.this,Main2Activity.class);
+                        /*User user = new User(email);*/
+                        FirebaseDatabase.getInstance().getReference("Users/"+FirebaseAuth.getInstance().getCurrentUser().getUid()+
+                                "/User_plants/"+holder.namelat.getText().toString().trim())
+                                .setValue(true);
+                        Toast.makeText(AddPlantActivity.this, "Roślina została dodana do Twojego ogrodu", Toast.LENGTH_SHORT).show();
+
+                        /*Intent intent = new Intent(AddPlantActivity.this,Main2Activity.class);
                         intent.putExtra("namepol", model.getNazwa());
                         intent.putExtra("namelat", model.getNazwa_lac());
-                        startActivity(intent);
+                        startActivity(intent);*/
                     }
                 });
             }
