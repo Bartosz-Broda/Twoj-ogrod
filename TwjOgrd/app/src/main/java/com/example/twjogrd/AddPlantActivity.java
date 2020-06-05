@@ -51,12 +51,12 @@ public class AddPlantActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_plant);
 
-        backButton = (ImageButton) findViewById(R.id.backButton);
+        backButton = findViewById(R.id.backButton);
         progressDialog = new ProgressDialog(this);
-        recyclerView = (RecyclerView) findViewById(R.id.plantList);
+        recyclerView = findViewById(R.id.plantList);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        arrayList = new ArrayList<DataSetFire>();
+        /*arrayList = new ArrayList<DataSetFire>();*/
         databaseReference = FirebaseDatabase.getInstance().getReference().child("plants");
         databaseReference.keepSynced(true);
         options = new FirebaseRecyclerOptions.Builder<DataSetFire>().setQuery(databaseReference, DataSetFire.class).build();
