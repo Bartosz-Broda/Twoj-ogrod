@@ -67,14 +67,16 @@ public class AddPlantActivity extends AppCompatActivity implements View.OnClickL
 
                 holder.namepol.setText(model.getNazwa());
                 holder.namelat.setText(model.getNazwa_lac());
+                holder.id.setText(model.getIdrosliny());
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        /*User user = new User(email);*/
                         FirebaseDatabase.getInstance().getReference("Users/"+FirebaseAuth.getInstance().getCurrentUser().getUid()+
-                                "/User_plants/"+holder.namelat.getText().toString().trim())
+                                "/User_plants").child(holder.id.getText().toString().trim())
                                 .setValue(true);
                         Toast.makeText(AddPlantActivity.this, "Roślina została dodana do Twojego ogrodu", Toast.LENGTH_SHORT).show();
+                        finish();
+                        startActivity(new Intent(AddPlantActivity.this, ProfileActivity.class));
 
                         /*Intent intent = new Intent(AddPlantActivity.this,Main2Activity.class);
                         intent.putExtra("namepol", model.getNazwa());
