@@ -4,6 +4,8 @@ public class DataSetFire {
     String nazwa;
     String nazwa_lac;
     Integer idrosliny;
+    Integer temp_min;
+    Integer wilg_min;
 
 
     public String getNazwa() {
@@ -30,12 +32,30 @@ public class DataSetFire {
         this.idrosliny = idrosliny;
     }
 
+    public String getTemp_min() {
+        return temp_min.toString();
+    }
+
+    public void setTemp_min(Integer temp_min) {
+        this.temp_min = temp_min;
+    }
+
+    public String getWilg_min() {
+        return wilg_min.toString();
+    }
+
+    public void setWilg_min(Integer wilg_min) {
+        this.wilg_min = wilg_min;
+    }
+
     public DataSetFire() {
     }
 
-    public DataSetFire(String nazwa, String nazwa_lac, Integer idrosliny) {
+    public DataSetFire(String nazwa, String nazwa_lac, Integer idrosliny, Integer temp_min, Integer wilg_min) {
         this.nazwa = nazwa;
         this.nazwa_lac = nazwa_lac;
         this.idrosliny = idrosliny;
+        this.temp_min = temp_min;
+        this.wilg_min = wilg_min;
     }
 }

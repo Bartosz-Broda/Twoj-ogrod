@@ -136,6 +136,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
                 holder.namepol.setText(model.getNazwa());
                 holder.namelat.setText(model.getNazwa_lac());
+                holder.id.setText(model.getIdrosliny());
+                holder.temp_min.setText(model.getTemp_min());
+                holder.min_soil.setText(model.getWilg_min());
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -153,7 +156,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public FirebaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 progressBar.setVisibility(View.GONE);
-                return new FirebaseViewHolder(LayoutInflater.from(ProfileActivity.this).inflate(R.layout.row,parent, false));
+                return new FirebaseViewHolder(LayoutInflater.from(ProfileActivity.this).inflate(R.layout.row_for_profile,parent, false));
             }
         };
 

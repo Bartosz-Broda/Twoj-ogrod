@@ -10,7 +10,7 @@ import com.google.firebase.database.DatabaseReference;
 
 public class FirebaseViewHolder extends RecyclerView.ViewHolder {
 
-    public TextView namepol,namelat,id;
+    public TextView namepol,namelat,id,temp_min,min_soil;
 
     public FirebaseViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -18,5 +18,8 @@ public class FirebaseViewHolder extends RecyclerView.ViewHolder {
         namepol = itemView.findViewById(R.id.namePol);
         namelat = itemView.findViewById(R.id.nameLat);
         id = itemView.findViewById(R.id.plantID);
+        temp_min = itemView.findViewById(R.id.temp_min);
+        min_soil = itemView.findViewById(R.id.wilg_min);
+
     }
 }

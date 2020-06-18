@@ -42,6 +42,30 @@
             android:text="@string/nazwa_aci_ska"
             android:textAlignment="center"
             android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/temp_min"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/minimalna_temperatura"
+            android:textAlignment="center"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/wilg_min"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="224dp"
+            android:layout_marginTop="22dp"
+            android:layout_marginEnd="99dp"
+            android:layout_marginBottom="14dp"
+            android:text="minimalna_wilgotnosc"
+            android:textAlignment="center"
+            android:textSize="20sp" />
+
+
+
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

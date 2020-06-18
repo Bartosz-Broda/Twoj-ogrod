@@ -10,7 +10,7 @@
         android:id="@+id/textLatLong"
         android:layout_width="248dp"
         android:layout_height="76dp"
-        android:text="@string/adres_email"
+        android:text="Współrzędne"
         android:textAlignment="viewStart"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
