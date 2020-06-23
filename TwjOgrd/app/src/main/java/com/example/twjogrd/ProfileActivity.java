@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -17,16 +16,16 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.twjogrd.model.CurrentWeather;
+import com.example.twjogrd.model.CurrentWeatherDetails;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.location.LocationCallback;
@@ -35,18 +34,21 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final String TAG = "ProfileActivity";
     private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
 
     private FirebaseAuth firebaseAuth;
@@ -99,6 +101,34 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         displayUserPlants();
         getLocation();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(CurrentWeatherApi.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        CurrentWeatherApi api = (CurrentWeatherApi) retrofit.create(CurrentWeatherApi.class);
+        Call<CurrentWeather> call = api.getCurrentWeather();
+        call.enqueue(new Callback<CurrentWeather>() {
+            @Override
+            public void onResponse(Call<CurrentWeather> call, Response<CurrentWeather> response) {
+                Log.d(TAG,"onResponse: Server Response: " + response.toString());
+                Log.d(TAG,"onResponse: received Information: " + response.body().toString());
+                ArrayList<CurrentWeatherDetails> detailsList  = response.body().getData();
+                for(int i=0; i<detailsList.size(); i++){
+                    Log.d("temp", detailsList.get(i).getTemp());
+                    Log.d("city_name", detailsList.get(i).getCity_name());
+                    Log.d("precip", detailsList.get(i).getPrecip());
+                    Log.d("wind_spd", detailsList.get(i).getWind_spd());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CurrentWeather> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
 
     }
 
@@ -217,9 +247,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         }
                     }
                 }, Looper.getMainLooper());
-
-
-
     }
 
     @Override
