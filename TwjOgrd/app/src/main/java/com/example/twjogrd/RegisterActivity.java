@@ -91,6 +91,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                     .setValue(user);
 
+
                             Toast.makeText(RegisterActivity.this, "Zarejestrowano!", Toast.LENGTH_SHORT).show();
                             finish();
                             startActivity(new Intent(getApplicationContext(), ProfileActivity.class));

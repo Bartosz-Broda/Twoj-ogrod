@@ -10,9 +10,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.media.audiofx.Equalizer;
 import android.os.Bundle;
 import android.os.Looper;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,9 +29,11 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.example.twjogrd.model.CurrentWeather;
 import com.example.twjogrd.model.CurrentWeatherDetails;
+import com.example.twjogrd.ui.Cords;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.location.LocationCallback;
@@ -54,15 +62,21 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private FirebaseAuth firebaseAuth;
 
     private String userEmail;
-    private TextView latLong;
+    private Boolean check;
+    private TextView city;
     private ImageButton plusButton;
+    private ToggleButton saveDelBtn;
     private ProgressBar progressBar;
 
     private RecyclerView recyclerView;
-    private ArrayList<DataSetFire>arrayList;
+    private ArrayList<DataSetFire> arrayList;
     private FirebaseRecyclerOptions<DataSetFire> options;
-    private FirebaseRecyclerAdapter<DataSetFire,FirebaseViewHolder> adapter;
+    private FirebaseRecyclerAdapter<DataSetFire, FirebaseViewHolder> adapter;
     private DatabaseReference databaseReference;
+
+    private LocationManager locationManager;
+    private LocationListener locationListener;
+
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -86,49 +100,67 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         firebaseAuth = FirebaseAuth.getInstance();
 
         //if user is not logged in, goes to the login activity
-        if(firebaseAuth.getCurrentUser() == null){
+        if (firebaseAuth.getCurrentUser() == null) {
             finish();
             startActivity(new Intent(this, LoginActivity.class));
         }
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
         userEmail = user.getEmail();
-        latLong = findViewById(R.id.textLatLong);
+        city = findViewById(R.id.textCity);
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
+
         plusButton = findViewById(R.id.plusButton);
         plusButton.setOnClickListener(this);
 
+        saveDelBtn = findViewById(R.id.toggleButton);
+        saveDelBtn.setOnClickListener(this);
+        SharedPreferences sharedPrefs = getSharedPreferences("com.example.twjogrd", MODE_PRIVATE);
+        saveDelBtn.setChecked(sharedPrefs.getBoolean("SaveCityButton", false));
+
+
+
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                callForCurrentWeather(location.getLatitude(), location.getLongitude());
+
+                SharedPreferences.Editor editor = getSharedPreferences("com.example.twjogrd", MODE_PRIVATE).edit();
+                putDouble(editor, "latitude", location.getLatitude()).apply();
+                putDouble(editor, "longitude", location.getLongitude()).apply();
+
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(intent);
+            }
+        };
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.INTERNET
+            },10);
+            return;
+        } else {
+            getCurrentLocation();
+        }
+
+
         displayUserPlants();
-        getLocation();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(CurrentWeatherApi.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        CurrentWeatherApi api = (CurrentWeatherApi) retrofit.create(CurrentWeatherApi.class);
-        Call<CurrentWeather> call = api.getCurrentWeather();
-        call.enqueue(new Callback<CurrentWeather>() {
-            @Override
-            public void onResponse(Call<CurrentWeather> call, Response<CurrentWeather> response) {
-                Log.d(TAG,"onResponse: Server Response: " + response.toString());
-                Log.d(TAG,"onResponse: received Information: " + response.body().toString());
-                ArrayList<CurrentWeatherDetails> detailsList  = response.body().getData();
-                for(int i=0; i<detailsList.size(); i++){
-                    Log.d("temp", detailsList.get(i).getTemp());
-                    Log.d("city_name", detailsList.get(i).getCity_name());
-                    Log.d("precip", detailsList.get(i).getPrecip());
-                    Log.d("wind_spd", detailsList.get(i).getWind_spd());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<CurrentWeather> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
 
     }
 
@@ -146,10 +178,28 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 startActivity(new Intent(this, AddPlantActivity.class));
             }
         }
+        if(v == saveDelBtn){
+            if (saveDelBtn.isChecked())
+            {
+                SharedPreferences.Editor editor = getSharedPreferences("com.example.twjogrd", MODE_PRIVATE).edit();
+                editor.putBoolean("SaveCityButton", true);
+                editor.apply();
+            }
+            else
+            {
+                SharedPreferences.Editor editor = getSharedPreferences("com.example.twjogrd", MODE_PRIVATE).edit();
+                editor.putBoolean("SaveCityButton", false);
+                editor.apply();
+
+                //this.getSharedPreferences("com.example.twjogrd", MODE_PRIVATE).edit().clear().apply();
+
+
+            }
+        }
     }
-    
+
+    //displaying plants saved by user in recyclerview just like in AddPlantActivity
     private void displayUserPlants(){
-        //displaying plants saved by user in recyclerview just like in AddPlantActivity
         recyclerView = findViewById(R.id.userPlantList);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -189,64 +239,78 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 return new FirebaseViewHolder(LayoutInflater.from(ProfileActivity.this).inflate(R.layout.row_for_profile,parent, false));
             }
         };
-
         recyclerView.setAdapter(adapter);
-    }
-
-    private void getLocation(){
-        if (ContextCompat.checkSelfPermission(
-                getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION
-        ) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(
-                    ProfileActivity.this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    REQUEST_CODE_LOCATION_PERMISSION
-            );
-
-        }else{
-            getCurrentLocation();
-        }
-
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == REQUEST_CODE_LOCATION_PERMISSION && grantResults.length > 0) {
-            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                getCurrentLocation();
-            }else {
-                Toast.makeText(this, "Odmowa dostępu", Toast.LENGTH_SHORT).show();
-            }
+        switch (requestCode){
+            case 10:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED ){
+                    getCurrentLocation();
+                }
         }
+
     }
 
     @SuppressLint("MissingPermission")
     private void getCurrentLocation(){
-        final LocationRequest locationRequest = new LocationRequest();
-        locationRequest.setInterval(10000);
-        locationRequest.setFastestInterval(9000);
-        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        if (saveDelBtn.isChecked()) {
+            SharedPreferences sharedPrefs = getSharedPreferences("com.example.twjogrd", MODE_PRIVATE);
+            double latitude = getDouble(sharedPrefs, "latitude", 0);
+            double longitude = getDouble(sharedPrefs, "longitude", 0);
+            callForCurrentWeather(latitude, longitude);
+        }else{
+            locationManager.requestLocationUpdates("gps", 20000, 30, locationListener);
+        }
+    }
 
-        LocationServices.getFusedLocationProviderClient(ProfileActivity.this)
-                .requestLocationUpdates(locationRequest, new LocationCallback(){
-                    @Override
-                    public void onLocationResult(LocationResult locationResult) {
-                        super.onLocationResult(locationResult);
-                        LocationServices.getFusedLocationProviderClient(ProfileActivity.this)
-                                .removeLocationUpdates(this);
-                        if (locationRequest != null && locationResult.getLocations().size() > 0){
-                            int latestLocationIndex = locationResult.getLocations().size() - 1;
-                            double latitude = locationResult.getLocations().get(latestLocationIndex).getLatitude();
-                            double longitude = locationResult.getLocations().get(latestLocationIndex).getLongitude();
-                            latLong.setText(
-                                    String.format(
-                                            "Latitude: %s\nLongitude: %s", latitude,longitude
-                                    )
-                            );
-                        }
-                    }
-                }, Looper.getMainLooper());
+
+    private void callForCurrentWeather(double latitude, double longitude){
+        //Here Weatherbit.io api is called to get an actual data about weather.
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(CurrentWeatherApi.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        CurrentWeatherApi api = retrofit.create(CurrentWeatherApi.class);
+
+        Call<CurrentWeather> call = api.getCurrentWeather(latitude , longitude);
+
+        call.enqueue(new Callback<CurrentWeather>() {
+            @Override
+            public void onResponse(Call<CurrentWeather> call, Response<CurrentWeather> response) {
+                Log.d(TAG,"onResponse: Server Response: " + response.toString());
+                Log.d(TAG,"onResponse: received Information: " + response.body().toString());
+                ArrayList<CurrentWeatherDetails> detailsList  = response.body().getData();
+
+                city.setText(detailsList.get(0).getCity_name());
+
+
+                for(int i=0; i<detailsList.size(); i++){
+                    Log.d("temp", detailsList.get(i).getTemp());
+                    Log.d("city_name", detailsList.get(i).getCity_name());
+                    Log.d("precip", detailsList.get(i).getPrecip());
+                    Log.d("wind_spd", detailsList.get(i).getWind_spd());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CurrentWeather> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+    }
+
+    //SETTER for SharedPreferences (used for storing latitude and longitude double values)
+    SharedPreferences.Editor putDouble(final SharedPreferences.Editor edit, final String key, final double value) {
+        return edit.putLong(key, Double.doubleToRawLongBits(value));
+    }
+
+    //GETTER for SharedPreferences (used for getting latitude and longitude double values)
+    double getDouble(final SharedPreferences prefs, final String key, final double defaultValue) {
+        return Double.longBitsToDouble(prefs.getLong(key, Double.doubleToLongBits(defaultValue)));
     }
 
     @Override
@@ -277,3 +341,4 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         return super.onOptionsItemSelected(item);
     }
 }
+//TODO: UZYC FIREBASE DO ZAPISU LATIDUDE I LONGITUDE OGRODU!!!

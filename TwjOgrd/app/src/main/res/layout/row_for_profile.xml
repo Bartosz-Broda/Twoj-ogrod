@@ -2,7 +2,7 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="130dp"
+    android:layout_height="100dp"
 
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardElevation="10dp"
@@ -12,7 +12,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="130dp"
+        android:layout_height="110dp"
 
         android:orientation="vertical">
 
@@ -29,32 +29,32 @@
 
         <TextView
             android:id="@+id/temp_min"
-            android:layout_width="70dp"
-            android:layout_height="50dp"
+            android:layout_width="114dp"
+            android:layout_height="29dp"
             android:layout_below="@+id/namePol"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginStart="66dp"
-            android:layout_marginTop="21dp"
-            android:layout_marginEnd="257dp"
-            android:layout_marginBottom="15dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="248dp"
+            android:layout_marginBottom="23dp"
             android:text="@string/minimalna_temperatura"
             android:textAlignment="center"
             android:textSize="20sp" />
 
         <TextView
             android:id="@+id/wilg_min"
-            android:layout_width="70dp"
-            android:layout_height="50dp"
+            android:layout_width="114dp"
+            android:layout_height="30dp"
             android:layout_below="@+id/namePol"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginStart="224dp"
-            android:layout_marginTop="22dp"
-            android:layout_marginEnd="99dp"
-            android:layout_marginBottom="14dp"
+            android:layout_marginStart="250dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="28dp"
+            android:layout_marginBottom="21dp"
             android:text="minimalna_wilgotnosc"
             android:textAlignment="center"
             android:textSize="20sp" />
