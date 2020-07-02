@@ -57,13 +57,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "ProfileActivity";
-    private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
 
     private FirebaseAuth firebaseAuth;
 
     private String userEmail;
-    private Boolean check;
     private TextView city;
+    private TextView precip;
+    private TextView wind;
+    private TextView temperature;
     private ImageButton plusButton;
     private ToggleButton saveDelBtn;
     private ProgressBar progressBar;
@@ -107,7 +108,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
         userEmail = user.getEmail();
+
         city = findViewById(R.id.textCity);
+        wind = findViewById(R.id.textWind);
+        precip = findViewById(R.id.textPrecip);
+        temperature = findViewById(R.id.textTemperature);
+
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
 
@@ -283,8 +289,15 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 Log.d(TAG,"onResponse: received Information: " + response.body().toString());
                 ArrayList<CurrentWeatherDetails> detailsList  = response.body().getData();
 
-                city.setText(detailsList.get(0).getCity_name());
+                double windspd = Double.parseDouble(response.body().getData().get(0).getWind_spd()+"d");
+                windspd = windspd*3.6;
+                windspd = Math.round(windspd * 100);
+                windspd = windspd/100;
 
+                city.setText(detailsList.get(0).getCity_name());
+                wind.setText("Wiatr: "+windspd+"km/h");
+                precip.setText("Opady: "+detailsList.get(0).getPrecip()+"mm/h");
+                temperature.setText("Temperatura: "+detailsList.get(0).getTemp()+"°C");
 
                 for(int i=0; i<detailsList.size(); i++){
                     Log.d("temp", detailsList.get(i).getTemp());
@@ -341,4 +354,3 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         return super.onOptionsItemSelected(item);
     }
 }
-//TODO: UZYC FIREBASE DO ZAPISU LATIDUDE I LONGITUDE OGRODU!!!
