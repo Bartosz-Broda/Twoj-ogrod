@@ -169,7 +169,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             getCurrentLocation();
         }
 
-
         displayUserPlants();
 
     }
@@ -177,17 +176,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         if(v == plusButton){
-            FirebaseUser user = firebaseAuth.getCurrentUser();
-            assert user != null;
-            if (user.getEmail().equals("mlodszybro@wp.pl")){
-                finish();
-                startActivity(new Intent(this, AddPlantExtendedActivity.class));
-            }
-            else {
                 finish();
                 startActivity(new Intent(this, AddPlantActivity.class));
             }
-        }
         if(v == saveDelBtn){
             if (saveDelBtn.isChecked())
             {
@@ -200,10 +191,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 SharedPreferences.Editor editor = getSharedPreferences("com.example.twjogrd", MODE_PRIVATE).edit();
                 editor.putBoolean("SaveCityButton", false);
                 editor.apply();
-
-                //this.getSharedPreferences("com.example.twjogrd", MODE_PRIVATE).edit().clear().apply();
-
-
             }
         }
     }
@@ -217,6 +204,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         Query keyQuery = FirebaseDatabase.getInstance().getReference("Users/"+FirebaseAuth.getInstance().getCurrentUser().getUid()+"/User_plants");
         databaseReference = FirebaseDatabase.getInstance().getReference("plants");
         databaseReference.keepSynced(true);
+
         //below line matches keys from User_plants to keys in plants node
         options = new FirebaseRecyclerOptions.Builder<DataSetFire>().setIndexedQuery(keyQuery, databaseReference, DataSetFire.class).build();
 

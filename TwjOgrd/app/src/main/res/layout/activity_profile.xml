@@ -58,15 +58,15 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/userPlantList"
-        android:layout_width="match_parent"
-        android:layout_height="444dp"
+        android:layout_width="410dp"
+        android:layout_height="411dp"
         android:layout_marginTop="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/plusButton"
-        app:layout_constraintVertical_bias="0.511" />
+        app:layout_constraintVertical_bias="0.75" />
 
     <ToggleButton
         android:id="@+id/toggleButton"

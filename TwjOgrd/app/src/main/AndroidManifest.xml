@@ -17,8 +17,6 @@
         tools:targetApi="m">
 
         <activity android:name=".Main2Activity"></activity>
-        <activity android:name=".AddToBaseActivity" />
-        <activity android:name=".AddPlantExtendedActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".AddPlantActivity" />
         <activity android:name=".LoginActivity" />
