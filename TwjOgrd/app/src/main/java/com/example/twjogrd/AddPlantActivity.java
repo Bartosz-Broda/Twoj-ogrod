@@ -133,7 +133,7 @@ public class AddPlantActivity extends AppCompatActivity implements View.OnClickL
     }
 
 
-    //searching data
+    //searching data in firebase database
     private void firebaseSearch(String searchText){
         String query;
         if(searchText.length()>0) {

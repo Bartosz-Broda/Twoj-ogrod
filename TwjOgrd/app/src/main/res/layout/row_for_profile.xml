@@ -78,6 +78,13 @@
             android:textAlignment="center"
             android:textSize="20sp" />
 
+        <ImageButton
+            android:id="@+id/deletePlantButton"
+            android:layout_width="57dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:srcCompat="@android:drawable/ic_delete" />
+
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

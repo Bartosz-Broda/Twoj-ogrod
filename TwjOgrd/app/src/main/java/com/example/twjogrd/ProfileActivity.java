@@ -13,6 +13,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -63,12 +64,14 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     private String userEmail;
     private TextView city;
-    private TextView precip;
+    private TextView soilM;
     private TextView wind;
     private TextView temperature;
     private ImageButton plusButton;
     private ToggleButton saveDelBtn;
     private ProgressBar progressBar;
+    private ImageButton infoBtn;
+
 
     private RecyclerView recyclerView;
     private ArrayList<DataSetFire> arrayList;
@@ -112,7 +115,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         city = findViewById(R.id.textCity);
         wind = findViewById(R.id.textWind);
-        precip = findViewById(R.id.textPrecip);
+        soilM = findViewById(R.id.textSoilMoisture);
         temperature = findViewById(R.id.textTemperature);
 
         progressBar = findViewById(R.id.progressBar);
@@ -121,12 +124,13 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         plusButton = findViewById(R.id.plusButton);
         plusButton.setOnClickListener(this);
 
+        infoBtn = findViewById(R.id.infoButton);
+        infoBtn.setOnClickListener(this);
+
         saveDelBtn = findViewById(R.id.toggleButton);
         saveDelBtn.setOnClickListener(this);
         SharedPreferences sharedPrefs = getSharedPreferences("com.example.twjogrd", MODE_PRIVATE);
         saveDelBtn.setChecked(sharedPrefs.getBoolean("SaveCityButton", false));
-
-
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         locationListener = new LocationListener() {
@@ -155,7 +159,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             public void onProviderDisabled(String provider) {
                 //Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 //startActivity(intent);
-                showAlert();
+                showgpsAlert();
             }
         };
 
@@ -176,7 +180,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         if(v == plusButton){
-                finish();
                 startActivity(new Intent(this, AddPlantActivity.class));
             }
         if(v == saveDelBtn){
@@ -193,6 +196,15 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 editor.apply();
             }
         }
+        if(v == infoBtn){
+            final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setTitle("Info")
+                    .setMessage("Ten parametr pokazuje przybliżoną wilgotność gleby na głębokości 10 - 40cm w Twoim ogrodzie.")
+                    .setNegativeButton("OK", (paramDialogInterface, paramInt) -> {
+                    });
+            dialog.show();
+        }
+
     }
 
     //displaying plants saved by user in recyclerview just like in AddPlantActivity
@@ -251,7 +263,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
-    private void showAlert() {
+    private void showgpsAlert() {
         final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle("Włącz lokalizację")
                 .setMessage("Twoja lokalizacja jest wyłączona.\nWłącz GPS aby używać aplikacji.")
@@ -312,8 +324,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
                 city.setText(detailsList.get(0).getCity_name());
                 wind.setText("Wiatr: "+windspd+"km/h");
-                precip.setText("Opady: "+precipitation+"mm/h");
                 temperature.setText("Temperatura: "+detailsList.get(0).getTemp()+"°C");
+
+                if(windspd > 40){
+                    wind.setText("Wiatr: "+windspd+"km/h" + " (Silny wiatr - zabezpiecz rośliny)");
+                    wind.setTextColor(Color.RED);
+                }
 
                 for(int i=0; i<detailsList.size(); i++){
                     Log.d("temp", detailsList.get(i).getTemp());
@@ -339,7 +355,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 .build();
         AgroWeatherApi api = retrofit.create(AgroWeatherApi.class);
 
-        //Some code to get an actual and previous date required by API.
+        //Some code to get an actual and yesterday date required by API.
         Date todayDate = Calendar.getInstance().getTime();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         String todayString = formatter.format(todayDate);
@@ -355,8 +371,20 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 Log.d(TAG,"onResponse: Server Response (agro): " + response.toString());
                 Log.d(TAG,"onResponse: received Information (agro): " + response.body().toString());
                 ArrayList<AgroWeatherDetails> detailsList  = response.body().getData();
+                if(response.body().getData().get(0).getSoilm_10_40cm()!=null) {
+                    double soilMoisture = Double.parseDouble(response.body().getData().get(0).getSoilm_10_40cm() + "d");
+                    soilMoisture = soilMoisture / 3;
+                    soilMoisture = Math.round(soilMoisture * 100);
+                    soilMoisture = soilMoisture / 100;
 
-                Log.d("soil moisture: ", detailsList.get(0).getSoilm_0_10cm());
+                    soilM.setText("Wilgotność gleby: " + soilMoisture + "%");
+
+                    Log.d("soil moisture 10-40cm: ", detailsList.get(0).getSoilm_10_40cm());
+                    Log.d("soil moisture 10-40cm: ", soilMoisture + "%");
+                }else{
+                    Toast.makeText(ProfileActivity.this, "Brak danych dot. wilgotnosci", Toast.LENGTH_SHORT).show();
+                    soilM.setText("Wilgotność gleby: Brak danych");
+                }
 
             }
 
