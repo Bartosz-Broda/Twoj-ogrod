@@ -7,6 +7,24 @@ public class DataSetFire {
     Integer temp_min;
     Integer wilg_min;
 
+    String hint_temperature;
+    String hint_soil;
+
+    public String getHint_temperature() {
+        return hint_temperature;
+    }
+
+    public void setHint_temperature(String hint_temperature) {
+        this.hint_temperature = hint_temperature;
+    }
+
+    public String getHint_soil() {
+        return hint_soil;
+    }
+
+    public void setHint_soil(String hint_soil) {
+        this.hint_soil = hint_soil;
+    }
 
     public String getNazwa() {
         return nazwa;

@@ -82,7 +82,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private LocationManager locationManager;
     private LocationListener locationListener;
 
-
     @SuppressLint("SetTextI18n")
     @Override
     protected void onStart() {
@@ -177,6 +176,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
+
     @Override
     public void onClick(View v) {
         if(v == plusButton){
@@ -227,18 +227,56 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 holder.namepol.setText(model.getNazwa());
                 holder.namelat.setText(model.getNazwa_lac());
                 holder.id.setText(model.getIdrosliny());
-                holder.temp_min.setText(model.getTemp_min());
-                holder.min_soil.setText(model.getWilg_min());
+
+                Log.d(TAG,"onResponse: ACTUAL SOIL: " + actualSoil);
+                Log.d(TAG,"onResponse: ACTUAL TEMP: " + actualTemp);
+
+                if(actualSoil > Double.parseDouble(model.getWilg_min()+"d")+2){
+                    holder.min_soil.setText("OK");
+                    holder.min_soil.setTextColor(Color.GREEN);
+                }else if(actualSoil > Double.parseDouble(model.getWilg_min()+"d")){
+                    holder.min_soil.setText("Kontrola");
+                    holder.min_soil.setTextColor(Color.YELLOW);
+                }else{
+                    holder.min_soil.setText("Podlej!");
+                    holder.min_soil.setTextColor(Color.RED);
+                }
+
+                if(actualTemp > Double.parseDouble(model.getTemp_min()+"d")+5){
+                    holder.temp_min.setText("OK");
+                    holder.temp_min.setTextColor(Color.GREEN);
+                }else if(actualTemp > Double.parseDouble(model.getTemp_min()+"d")){
+                    holder.temp_min.setText("Niska");
+                    holder.temp_min.setTextColor(Color.YELLOW);
+                }else{
+                    holder.temp_min.setText("Krytyczna!");
+                    holder.temp_min.setTextColor(Color.RED);
+                }
+                //holder.temp_min.setText(model.getTemp_min());
+                //holder.min_soil.setText(model.getWilg_min());
+
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Toast.makeText(ProfileActivity.this, "Ta roślina została już dodana do Twojego ogrodu", Toast.LENGTH_SHORT).show();
-
-                        /*Intent intent = new Intent(AddPlantActivity.this,Main2Activity.class);
-                        intent.putExtra("namepol", model.getNazwa());
-                        intent.putExtra("namelat", model.getNazwa_lac());
-                        startActivity(intent);*/
                     }
+                });
+                holder.deletePlantBtn.setOnClickListener(v -> {
+                    String plantID = model.getIdrosliny();
+                    final AlertDialog.Builder dialog = new AlertDialog.Builder(ProfileActivity.this);
+                    dialog.setTitle("Alert")
+                            .setMessage("Czy chcesz usunąć tę roślinę ze swojego ogrodu?")
+                            .setPositiveButton("Usuń", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                                    Utils.removePlant(plantID);
+                                    Toast.makeText(ProfileActivity.this, "Usunięto z ogrodu", Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .setNegativeButton("Anuluj", (paramDialogInterface, paramInt) -> {
+                            });
+                    dialog.show();
+
                 });
             }
 
@@ -325,10 +363,14 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 city.setText(detailsList.get(0).getCity_name());
                 wind.setText("Wiatr: "+windspd+"km/h");
                 temperature.setText("Temperatura: "+detailsList.get(0).getTemp()+"°C");
+                actualTemp = Double.parseDouble(detailsList.get(0).getTemp());
 
                 if(windspd > 40){
                     wind.setText("Wiatr: "+windspd+"km/h" + " (Silny wiatr - zabezpiecz rośliny)");
                     wind.setTextColor(Color.RED);
+                }else{
+                    wind.setText("Wiatr: "+windspd+"km/h");
+                    wind.setTextColor(city.getTextColors());
                 }
 
                 for(int i=0; i<detailsList.size(); i++){
@@ -347,6 +389,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         });
 
     }
+
+    public static double actualSoil;
+    public static double actualTemp;
 
     private void callForAgroWeather(double latitude, double longitude){
         Retrofit retrofit = new Retrofit.Builder()
@@ -368,16 +413,19 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         call.enqueue(new Callback<AgroWeather>() {
             @Override
             public void onResponse(Call<AgroWeather> call, Response<AgroWeather> response) {
-                Log.d(TAG,"onResponse: Server Response (agro): " + response.toString());
-                Log.d(TAG,"onResponse: received Information (agro): " + response.body().toString());
+                if(response.body()!=null) {
+                    Log.d(TAG, "onResponse: Server Response (agro): " + response.toString());
+                    Log.d(TAG, "onResponse: received Information (agro): " + response.body().toString());
+
                 ArrayList<AgroWeatherDetails> detailsList  = response.body().getData();
-                if(response.body().getData().get(0).getSoilm_10_40cm()!=null) {
+
                     double soilMoisture = Double.parseDouble(response.body().getData().get(0).getSoilm_10_40cm() + "d");
                     soilMoisture = soilMoisture / 3;
                     soilMoisture = Math.round(soilMoisture * 100);
                     soilMoisture = soilMoisture / 100;
 
                     soilM.setText("Wilgotność gleby: " + soilMoisture + "%");
+                    actualSoil = soilMoisture;
 
                     Log.d("soil moisture 10-40cm: ", detailsList.get(0).getSoilm_10_40cm());
                     Log.d("soil moisture 10-40cm: ", soilMoisture + "%");
@@ -439,5 +487,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         return super.onOptionsItemSelected(item);
     }
+
+
+
+
 }
 //TODO: DODAC LOKALIZACJE Z ANTENY

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg  PUBLIC '-//W3C//DTD SVG 1.0//EN'  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="210.7mm" height="297.04mm" clip-rule="evenodd" fill-rule="evenodd" image-rendering="optimizeQuality" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" version="1.0" viewBox="0 0 210697 297040" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
+ <defs>
+  <style type="text/css">
+    .fil0 {fill:none}
+    .fil2 {fill:url(#d);fill-rule:nonzero}
+    .fil1 {fill:url(#e);fill-rule:nonzero}
+    .fil3 {fill:url(#f);fill-rule:nonzero}
+  </style>
+  <linearGradient id="d" x1="48256" x2="1.6246e5" y1="2.0709e5" y2="2.0709e5" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#0B8BC3" offset="0"/>
+   <stop stop-color="#60C9E1" offset=".6"/>
+   <stop stop-color="#A2DCF1" offset="1"/>
+  </linearGradient>
+  <radialGradient id="e" cx="1.0192e5" cy="1.9002e5" r="90226" gradientTransform="matrix(.8862 0 0 1.4 11599 -76009)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#66BBE9" offset="0"/>
+   <stop stop-color="#44AEE3" offset=".4902"/>
+   <stop stop-color="#72CDF4" offset=".72941"/>
+   <stop stop-color="#3EB1E5" offset=".52941"/>
+   <stop stop-color="#16A8E1" offset="1"/>
+  </radialGradient>
+  <radialGradient id="f" cx="1.3813e5" cy="1.9052e5" r="36428" gradientTransform="matrix(.58818 0 0 1.1111 56885 -21170)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#6ECACF" offset="0"/>
+   <stop stop-color="#FEFEFE" offset="1"/>
+  </radialGradient>
+ </defs>
+  <rect class="fil0" width="2.107e5" height="2.9704e5"/>
+   <path class="fil1" d="m1.0535e5 58292c14278 60151 57113 90226 57113 1.203e5 0 30075-14279 60150-57113 60150-42835 0-57113-30075-57113-60150 0-30076 42835-60151 57113-1.203e5z"/>
+   <path class="fil2" d="m1.6236e5 1.7793e5c44 340 99 706 96 1044-180 21687-6872 38648-20814 49128-9015 6777-20963 10522-36298 10643-36307 288-51996-21338-56047-46462-730-4524-1805-20621-247-16000 335 993 755 1949 1129 2913 7432 19146 14354 35363 37447 35384 42024 40 72900-50839 74734-36650z"/>
+   <path class="fil3" d="m1.3038e5 1.4549e5c1840 9379 14826 23967 19779 33753 5412 10694-779 26290-13958 26290-11903 0-15870-10110-15870-20220s6081-19603 10049-39823z"/>
+</svg>
