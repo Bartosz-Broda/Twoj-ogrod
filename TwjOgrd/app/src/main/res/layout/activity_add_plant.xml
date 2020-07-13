@@ -4,6 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/tea"
+    android:backgroundTint="#CFFFFFFF"
+    android:backgroundTintMode="src_over"
+
     tools:context=".AddPlantActivity">
 
     <ImageButton
@@ -37,6 +41,7 @@
         android:text="Dodaj do ogrodu"
         android:textAlignment="center"
         android:textSize="23sp"
+        android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="@+id/backButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.471"

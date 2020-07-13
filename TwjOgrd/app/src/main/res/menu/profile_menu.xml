@@ -1,22 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <item
         android:id="@+id/user"
         android:title="uzytkownik"
         app:showAsAction="always"/>
 
     <item
-        android:id="@+id/settings"
-        android:icon="@drawable/ic_settings"
-        android:title="Ustawienia"
-        app:showAsAction="never"/>
-
-    <item
         android:id="@+id/logout"
         android:title="Wyloguj"
         app:showAsAction="never"/>
-
 
 </menu>

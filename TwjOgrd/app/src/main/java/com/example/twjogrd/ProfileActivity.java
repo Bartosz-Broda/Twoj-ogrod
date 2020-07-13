@@ -9,9 +9,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.SearchManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -41,9 +43,11 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -82,6 +86,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private LocationManager locationManager;
     private LocationListener locationListener;
 
+    public static double actualSoil;
+    public static double actualTemp;
+
     @SuppressLint("SetTextI18n")
     @Override
     protected void onStart() {
@@ -100,6 +107,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -156,8 +164,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
             @Override
             public void onProviderDisabled(String provider) {
-                //Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                //startActivity(intent);
                 showgpsAlert();
             }
         };
@@ -191,15 +197,28 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             }
             else
             {
-                SharedPreferences.Editor editor = getSharedPreferences("com.example.twjogrd", MODE_PRIVATE).edit();
-                editor.putBoolean("SaveCityButton", false);
-                editor.apply();
+                final AlertDialog.Builder dialog = new AlertDialog.Builder(ProfileActivity.this);
+                dialog.setTitle("Alert")
+                        .setMessage("Czy chcesz usunąć tę lokalizację? Aplikacja automatycznie przypisze nową lokalizację, używając Twojej aktualnej pozycji.")
+                        .setPositiveButton("Usuń", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                                SharedPreferences.Editor editor = getSharedPreferences("com.example.twjogrd", MODE_PRIVATE).edit();
+                                editor.putBoolean("SaveCityButton", false);
+                                editor.apply();
+                                getCurrentLocation();
+                            }
+                        })
+                        .setNegativeButton("Anuluj", (paramDialogInterface, paramInt) -> {
+                            saveDelBtn.setChecked(true);
+                        });
+                dialog.show();
             }
         }
         if(v == infoBtn){
             final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             dialog.setTitle("Info")
-                    .setMessage("Ten parametr pokazuje przybliżoną wilgotność gleby na głębokości 10 - 40cm w Twoim ogrodzie.")
+                    .setMessage("Ten parametr pokazuje przybliżoną wilgotność gleby na głębokości 10 - 40cm w Twojej okolicy.")
                     .setNegativeButton("OK", (paramDialogInterface, paramInt) -> {
                     });
             dialog.show();
@@ -252,13 +271,18 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                     holder.temp_min.setText("Krytyczna!");
                     holder.temp_min.setTextColor(Color.RED);
                 }
-                //holder.temp_min.setText(model.getTemp_min());
-                //holder.min_soil.setText(model.getWilg_min());
 
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                holder.googleSearchBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(ProfileActivity.this, "Ta roślina została już dodana do Twojego ogrodu", Toast.LENGTH_SHORT).show();
+                            try {
+                                Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
+                                String term = holder.namepol.getText().toString();
+                                intent.putExtra(SearchManager.QUERY, term);
+                                startActivity(intent);
+                            } catch (Exception e) {
+                                Toast.makeText(ProfileActivity.this, "Wyszukiwanie niemożliwe "+e , Toast.LENGTH_SHORT).show();
+                            }
                     }
                 });
                 holder.deletePlantBtn.setOnClickListener(v -> {
@@ -276,7 +300,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                             .setNegativeButton("Anuluj", (paramDialogInterface, paramInt) -> {
                             });
                     dialog.show();
-
                 });
             }
 
@@ -286,6 +309,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 progressBar.setVisibility(View.GONE);
                 return new FirebaseViewHolder(LayoutInflater.from(ProfileActivity.this).inflate(R.layout.row_for_profile,parent, false));
             }
+
         };
         recyclerView.setAdapter(adapter);
     }
@@ -298,7 +322,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                     getCurrentLocation();
                 }
         }
-
     }
 
     private void showgpsAlert() {
@@ -329,10 +352,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             callForCurrentWeather(latitude, longitude);
             callForAgroWeather(latitude, longitude);
         }else{
-            locationManager.requestLocationUpdates("gps", 20000, 30, locationListener);
+            locationManager.requestLocationUpdates("gps", 2000, 30, locationListener);
         }
     }
-
 
     private void callForCurrentWeather(double latitude, double longitude){
         //Here Weatherbit.io api is called to get an actual data about weather.
@@ -389,9 +411,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         });
 
     }
-
-    public static double actualSoil;
-    public static double actualTemp;
 
     private void callForAgroWeather(double latitude, double longitude){
         Retrofit retrofit = new Retrofit.Builder()
@@ -459,7 +478,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         return cal.getTime();
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.profile_menu, menu);
@@ -479,17 +497,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 finish();
                 firebaseAuth.signOut();
                 startActivity(new Intent(this, LoginActivity.class));
-            case R.id.settings:
-                Toast.makeText(this, "OPCJE", Toast.LENGTH_SHORT).show();
-                return true;
-
         }
 
         return super.onOptionsItemSelected(item);
     }
-
-
-
-
 }
-//TODO: DODAC LOKALIZACJE Z ANTENY

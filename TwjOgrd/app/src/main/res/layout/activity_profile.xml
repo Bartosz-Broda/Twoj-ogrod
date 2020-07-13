@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/leaf_background"
+    android:backgroundTint="#CFFFFFFF"
+    android:backgroundTintMode="src_over"
     tools:context=".ProfileActivity">
 
     <TextView
         android:id="@+id/textCity"
         android:layout_width="296dp"
         android:layout_height="32dp"
-        android:layout_marginStart="88dp"
+        android:layout_marginStart="68dp"
         android:text="City"
+        android:textColor="@android:color/black"
         android:textAlignment="viewStart"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -25,27 +28,44 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/twoje_ro_liny"
+        android:textColor="@android:color/black"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/userPlantList"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.341"
+        app:layout_constraintHorizontal_bias="0.426"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.263" />
+        app:layout_constraintVertical_bias="0.95" />
 
     <ImageButton
         android:id="@+id/plusButton"
         style="@android:style/Widget.ImageButton"
-        android:layout_width="54dp"
-        android:layout_height="34dp"
+        android:layout_width="40dp"
+        android:layout_height="35dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="TODO"
+        android:shadowColor="@color/text_shadow"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="2"
+        app:layout_constraintBottom_toBottomOf="@+id/textView3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/textView3"
+        app:layout_constraintTop_toTopOf="@+id/textView3"
+        app:layout_constraintVertical_bias="0.265"
+        app:srcCompat="@android:drawable/ic_input_add" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/userPlantList"
+        android:layout_width="match_parent"
+        android:layout_height="415dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.1"
-        app:layout_constraintStart_toEndOf="@+id/textView3"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.267"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -57,25 +77,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/userPlantList"
-        android:layout_width="match_parent"
-        android:layout_height="411dp"
-        android:layout_marginTop="10dp"
-        android:isScrollContainer="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintCircleRadius="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/plusButton"
-        app:layout_constraintVertical_bias="0.75" />
-
     <ToggleButton
         android:id="@+id/toggleButton"
-        android:layout_width="77dp"
+        android:layout_width="57dp"
         android:layout_height="39dp"
-        android:layout_marginLeft="6dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:layout_marginStart="6dp"
         android:layout_marginTop="6dp"
         android:text="ToggleButton"
         android:textOff="ZAPISZ"
@@ -90,52 +97,55 @@
         android:layout_width="wrap_content"
         android:layout_height="24dp"
         android:layout_marginStart="8dp"
-        android:layout_marginBottom="3dp"
         android:text="Temperature"
+        android:textColor="@android:color/black"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/plusButton"
+        app:layout_constraintBottom_toBottomOf="@+id/userPlantList"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textCity"
-        app:layout_constraintVertical_bias="0.151" />
+        app:layout_constraintVertical_bias="0.02" />
 
     <TextView
         android:id="@+id/textSoilMoisture"
         android:layout_width="wrap_content"
         android:layout_height="23dp"
         android:layout_marginStart="8dp"
-        android:layout_marginBottom="3dp"
         android:text="Soil Moisture"
+        android:textColor="@android:color/black"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/plusButton"
+        app:layout_constraintBottom_toBottomOf="@+id/userPlantList"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textCity"
-        app:layout_constraintVertical_bias="0.505" />
+        app:layout_constraintVertical_bias="0.079" />
 
     <TextView
         android:id="@+id/textWind"
         android:layout_width="wrap_content"
         android:layout_height="23dp"
         android:layout_marginStart="8dp"
-        android:layout_marginBottom="3dp"
         android:text="Wind"
+        android:textColor="@android:color/black"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/plusButton"
+        app:layout_constraintBottom_toBottomOf="@+id/userPlantList"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textCity"
-        app:layout_constraintVertical_bias="0.862" />
+        app:layout_constraintVertical_bias="0.134" />
 
     <ImageButton
         android:id="@+id/infoButton"
         android:layout_width="45dp"
         android:layout_height="23dp"
-        android:layout_marginTop="43dp"
+        android:layout_marginTop="2dp"
+        android:shadowColor="@color/text_shadow"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="2"
         android:background="?attr/selectableItemBackgroundBorderless"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintBottom_toBottomOf="@+id/textSoilMoisture"
         app:layout_constraintStart_toEndOf="@+id/textSoilMoisture"
-        app:layout_constraintTop_toBottomOf="@+id/textCity"
+        app:layout_constraintTop_toTopOf="@+id/textSoilMoisture"
         app:srcCompat="@android:drawable/ic_menu_info_details" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

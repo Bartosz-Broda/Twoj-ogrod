@@ -1,24 +1,23 @@
 package com.example.twjogrd;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
-import androidx.core.view.MenuItemCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.ColorSpace;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.view.MenuItemCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -59,6 +58,7 @@ public class AddPlantActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_plant);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         backButton = findViewById(R.id.backButton);
         progressDialog = new ProgressDialog(this);
@@ -84,14 +84,9 @@ public class AddPlantActivity extends AppCompatActivity implements View.OnClickL
                         FirebaseDatabase.getInstance().getReference("Users/"+FirebaseAuth.getInstance().getCurrentUser().getUid()+
                                 "/User_plants").child(holder.id.getText().toString().trim())
                                 .setValue(true);
-                        Toast.makeText(AddPlantActivity.this, "Roślina została dodana do Twojego ogrodu", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddPlantActivity.this, "Roślina " + holder.namepol.getText() + " została dodana do Twojego ogrodu", Toast.LENGTH_SHORT).show();
                         finish();
                         startActivity(new Intent(AddPlantActivity.this, ProfileActivity.class));
-
-                        /*Intent intent = new Intent(AddPlantActivity.this,Main2Activity.class);
-                        intent.putExtra("namepol", model.getNazwa());
-                        intent.putExtra("namelat", model.getNazwa_lac());
-                        startActivity(intent);*/
                     }
                 });
             }

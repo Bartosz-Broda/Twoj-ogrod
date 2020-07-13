@@ -22,6 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="17dp"
             android:text="@string/nazwa_polska"
+            android:textColor="@android:color/black"
             android:textAlignment="center"
             android:textSize="20sp" />
 
@@ -31,6 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="@string/nazwa_aci_ska"
+            android:textColor="@android:color/black"
             android:textAlignment="center"
             android:textSize="20sp" />
 

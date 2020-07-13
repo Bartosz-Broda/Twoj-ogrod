@@ -13,7 +13,7 @@ import com.google.firebase.database.DatabaseReference;
 public class FirebaseViewHolder extends RecyclerView.ViewHolder {
 
     public TextView namepol,namelat,id,temp_min,min_soil;
-    public ImageView deletePlantBtn;
+    public ImageView deletePlantBtn, googleSearchBtn;
 
     public FirebaseViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -24,5 +24,7 @@ public class FirebaseViewHolder extends RecyclerView.ViewHolder {
         temp_min = itemView.findViewById(R.id.temp_min);
         min_soil = itemView.findViewById(R.id.wilg_min);
         deletePlantBtn = itemView.findViewById(R.id.deletePlant);
+        googleSearchBtn = itemView.findViewById(R.id.googleImageView);
+
     }
 }

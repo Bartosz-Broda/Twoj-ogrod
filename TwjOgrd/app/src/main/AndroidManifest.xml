@@ -16,7 +16,6 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
 
-        <activity android:name=".Main2Activity"></activity>
         <activity android:name=".ProfileActivity" />
         <activity android:name=".AddPlantActivity" />
         <activity android:name=".LoginActivity" />
