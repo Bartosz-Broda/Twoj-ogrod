@@ -246,7 +246,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         recyclerView = findViewById(R.id.userPlantList);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        arrayList = new ArrayList<DataSetFire>();
+        arrayList = new ArrayList<>();
         Query keyQuery = FirebaseDatabase.getInstance().getReference("Users/"+FirebaseAuth.getInstance().getCurrentUser().getUid()).child("User_plants");
         databaseReference = FirebaseDatabase.getInstance().getReference("plants");
         databaseReference.keepSynced(true);

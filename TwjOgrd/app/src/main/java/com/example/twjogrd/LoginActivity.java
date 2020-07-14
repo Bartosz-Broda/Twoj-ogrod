@@ -25,6 +25,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText editTextPassword;
     private Button signInButton;
     private TextView registerTextView;
+    private TextView resetPassword;
 
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
@@ -44,13 +45,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             startActivity(new Intent(this, ProfileActivity.class));
         }
 
-        editTextEmail = (EditText) findViewById(R.id.signInEmail);
-        editTextPassword = (EditText) findViewById(R.id.signInPassword);
-        signInButton = (Button) findViewById(R.id.signInButton);
-        registerTextView = (TextView) findViewById(R.id.registerTextView);
+        editTextEmail = findViewById(R.id.signInEmail);
+        editTextPassword = findViewById(R.id.signInPassword);
+        signInButton = findViewById(R.id.signInButton);
+        registerTextView = findViewById(R.id.registerTextView);
+        resetPassword = findViewById(R.id.resetPasswordTextView);
 
         signInButton.setOnClickListener(this);
         registerTextView.setOnClickListener(this);
+        resetPassword.setOnClickListener(this);
 
     }
 
@@ -84,8 +87,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             //Starts profile activity
                             finish();
                             startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                        }else{
+                            Toast.makeText(LoginActivity.this, "Niepoprawny login lub hasło", Toast.LENGTH_LONG).show();
                         }
                     }
+
                 });
     }
 
@@ -100,6 +106,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             //going to the register activity
             finish();
             startActivity(new Intent(this, RegisterActivity.class));
+        }
+        if(v==resetPassword){
+            finish();
+            startActivity(new Intent(this, ResetPasswordActivity.class));
         }
 
     }
