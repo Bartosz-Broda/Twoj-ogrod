@@ -21,5 +21,3 @@ Lista tworzy się automatycznie na podstawie danych z bazy znajdującej się na 
 Baza jest zbudowana przeze mnie, na podstawie danych ogólnodostępnych w internecie.
 Baza danych zawiera także wymagania co do temperatury oraz wilgotności gleby dla każdej rośliny.
 Porównanie danych z API oraz danych z bazy pozwala na wyświetlanie prostych wskazówek, jak np. "Podlej!"
-
-*Aplikacja wykonana na potrzeby zajęć na studiach
