@@ -25,14 +25,14 @@
         android:layout_height="46dp"
         android:autofillHints="password"
         android:ems="10"
-        android:hint="@string/has_o"
+        android:hint="@string/has_o_min_6_znak_w"
         android:inputType="textPassword"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/adresEmail"
-        app:layout_constraintVertical_bias="0.047" />
+        app:layout_constraintVertical_bias="0.042" />
 
     <Button
         android:id="@+id/buttonRegister"

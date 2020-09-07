@@ -13,6 +13,6 @@ public interface AgroWeatherApi {
 
     String BASE_URL = "https://api.weatherbit.io/v2.0/history/agweather/";
 
-    @GET("?key=22b8f92434474c88af17c9bd729e0e7a")
+    @GET("?key=d89779e647294ffe98db8644d5127f5a")
     Call<AgroWeather> getAgroWeather(@Query("lat") double lat, @Query("lon") double lon, @Query("start_date") String start, @Query("end_date") String end);
 }

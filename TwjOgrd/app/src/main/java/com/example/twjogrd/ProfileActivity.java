@@ -438,11 +438,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         Date todayDate = Calendar.getInstance().getTime();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         String todayString = formatter.format(todayDate);
-        String yesterdayString = formatter.format(yesterday());
+        String tommorowString = formatter.format(tommorow());
         Log.d("DATA: ", todayString);
-        Log.d("DATA: ", yesterdayString);
+        Log.d("DATA: ", tommorowString);
 
-        Call<AgroWeather> call = api.getAgroWeather(latitude , longitude, yesterdayString, todayString);
+        Call<AgroWeather> call = api.getAgroWeather(latitude , longitude, todayString ,tommorowString);
 
         call.enqueue(new Callback<AgroWeather>() {
             @Override
@@ -487,9 +487,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         return Double.longBitsToDouble(prefs.getLong(key, Double.doubleToLongBits(defaultValue)));
     }
 
-    private Date yesterday() {
+    private Date tommorow() {
         final Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -1);
+        cal.add(Calendar.DATE, 1);
         return cal.getTime();
     }
 

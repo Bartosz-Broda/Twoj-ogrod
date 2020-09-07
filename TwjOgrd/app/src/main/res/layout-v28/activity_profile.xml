@@ -5,28 +5,152 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/leaf_background"
-    android:backgroundTint="#CFFFFFFF"
+    android:backgroundTint="#DFFFFFFF"
     android:backgroundTintMode="src_over"
     tools:context=".ProfileActivity">
 
-    <TextView
-        android:id="@+id/textCity"
-        android:layout_width="296dp"
-        android:layout_height="32dp"
-        android:layout_marginStart="68dp"
-        android:text="City"
-        android:textColor="@android:color/black"
-        android:textAlignment="viewStart"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+
+        android:layout_margin="10dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="10dp"
+
+        app:layout_constraintBottom_toTopOf="@+id/textView3"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.019" />
+        tools:ignore="MissingConstraints">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:background="@drawable/weather_background"
+            android:backgroundTint="#BFFFFFFF"
+            android:backgroundTintMode="src_over"
+
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/userPlantList"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.023"
+            tools:layout_editor_absoluteX="0dp">
+
+            <TextView
+                android:id="@+id/textCity"
+                android:layout_width="296dp"
+                android:layout_height="32dp"
+                android:layout_alignBottom="@+id/toggleButton"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="2dp"
+                android:layout_toEndOf="@+id/toggleButton"
+                android:text="City"
+                android:textAlignment="viewStart"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.019" />
+
+            <ToggleButton
+                android:id="@+id/toggleButton"
+                android:layout_width="57dp"
+                android:layout_height="39dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="7dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:text="ToggleButton"
+                android:textOff="ZAPISZ"
+                android:textOn="USUŃ"
+                app:layout_constraintEnd_toStartOf="@+id/textCity"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textTemperature"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="12dp"
+                android:layout_marginBottom="70dp"
+                android:text="Temperature"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/userPlantList"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textCity"
+                app:layout_constraintVertical_bias="0.02"
+                tools:ignore="NotSibling" />
+
+            <TextView
+                android:id="@+id/textSoilMoisture"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_alignTop="@+id/textTemperature"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="29dp"
+                android:text="Soil Moisture"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/userPlantList"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textCity"
+                app:layout_constraintVertical_bias="0.079"
+                tools:ignore="NotSibling" />
+
+            <TextView
+                android:id="@+id/textWind"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_below="@+id/textSoilMoisture"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="3dp"
+                android:text="Wind"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/userPlantList"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textCity"
+                app:layout_constraintVertical_bias="0.139"
+                tools:ignore="NotSibling" />
+
+            <ImageButton
+                android:id="@+id/infoButton"
+                android:layout_width="45dp"
+                android:layout_height="23dp"
+                android:layout_above="@+id/textWind"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="-1dp"
+                android:layout_toEndOf="@+id/textSoilMoisture"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:shadowColor="@color/text_shadow"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:shadowRadius="2"
+                app:layout_constraintBottom_toBottomOf="@+id/textSoilMoisture"
+                app:layout_constraintStart_toEndOf="@+id/textSoilMoisture"
+                app:layout_constraintTop_toTopOf="@+id/textSoilMoisture"
+                app:srcCompat="@android:drawable/ic_menu_info_details" />
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="124dp"
+        android:layout_height="26dp"
         android:text="@string/twoje_ro_liny"
         android:textColor="@android:color/black"
         android:textSize="20sp"
@@ -77,75 +201,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ToggleButton
-        android:id="@+id/toggleButton"
-        android:layout_width="57dp"
-        android:layout_height="39dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="6dp"
-        android:text="ToggleButton"
-        android:textOff="ZAPISZ"
-        android:textOn="USUŃ"
-        app:layout_constraintEnd_toStartOf="@+id/textCity"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textTemperature"
-        android:layout_width="wrap_content"
-        android:layout_height="24dp"
-        android:layout_marginStart="8dp"
-        android:text="Temperature"
-        android:textColor="@android:color/black"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/userPlantList"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textCity"
-        app:layout_constraintVertical_bias="0.02" />
-
-    <TextView
-        android:id="@+id/textSoilMoisture"
-        android:layout_width="wrap_content"
-        android:layout_height="23dp"
-        android:layout_marginStart="8dp"
-        android:text="Soil Moisture"
-        android:textColor="@android:color/black"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/userPlantList"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textCity"
-        app:layout_constraintVertical_bias="0.079" />
-
-    <TextView
-        android:id="@+id/textWind"
-        android:layout_width="wrap_content"
-        android:layout_height="23dp"
-        android:layout_marginStart="8dp"
-        android:text="Wind"
-        android:textColor="@android:color/black"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/userPlantList"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textCity"
-        app:layout_constraintVertical_bias="0.134" />
-
-    <ImageButton
-        android:id="@+id/infoButton"
-        android:layout_width="45dp"
-        android:layout_height="23dp"
-        android:layout_marginTop="2dp"
-        android:shadowColor="@color/text_shadow"
-        android:shadowDx="1"
-        android:shadowDy="1"
-        android:shadowRadius="2"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        app:layout_constraintBottom_toBottomOf="@+id/textSoilMoisture"
-        app:layout_constraintStart_toEndOf="@+id/textSoilMoisture"
-        app:layout_constraintTop_toTopOf="@+id/textSoilMoisture"
-        app:srcCompat="@android:drawable/ic_menu_info_details" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

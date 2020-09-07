@@ -27,6 +27,7 @@
     <string name="nazwa_aci_ska">Nazwa łacińska</string>
     <string name="minimalna_temperatura">minimalna temperatura</string>
     <string name="tempereature">Tempereature</string>
-    <string name="wprowad_email">Wprowadź email</string>
     <string name="resetuj">Resetuj</string>
+    <string name="wprowad_email">Wprowadź email</string>
+    <string name="has_o_min_6_znak_w">Hasło (min. 6 znaków)</string>
 </resources>

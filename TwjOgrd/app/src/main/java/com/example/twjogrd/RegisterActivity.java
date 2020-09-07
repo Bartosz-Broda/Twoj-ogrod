@@ -53,7 +53,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         textViewSignin = (TextView) findViewById(R.id.textView);
         registerButton.setOnClickListener(this);
         textViewSignin.setOnClickListener(this);
-
     }
 
     private void registerUser(){
