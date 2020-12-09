@@ -9,7 +9,7 @@ You can choose your plants from a list by clicking the green plus button on the 
 The list is provided by firebase realtime database, which is built by me, based on informations found on internet.
 Database also contains some information about plants requirements, thanks to which application can print simple hints like "Irrigate!" 
 
-
+----------------------------------------------------
 
 Projekt aplikacji pomagającej w uprawie ogrodu
 
