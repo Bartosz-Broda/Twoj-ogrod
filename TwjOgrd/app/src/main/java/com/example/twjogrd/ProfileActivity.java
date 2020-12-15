@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -50,11 +51,24 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
+
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -90,17 +104,24 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     public static double actualSoil;
     public static double actualTemp;
 
+    public ProfileActivity() throws CertificateException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException, IOException {
+    }
+
     @SuppressLint("SetTextI18n")
     @Override
     protected void onStart() {
         super.onStart();
-        adapter.startListening();
+        if (adapter != null) {
+            adapter.startListening();
+        }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        adapter.stopListening();
+        if (adapter != null) {
+            adapter.stopListening();
+        }
     }
 
 
@@ -268,9 +289,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 if(actualSoil > Double.parseDouble(model.getWilg_min()+"d")+2){
                     holder.min_soil.setText("OK");
                     holder.min_soil.setTextColor(Color.GREEN);
-                }else if(actualSoil > Double.parseDouble(model.getWilg_min()+"d")){
+                }else if(actualSoil > Double.parseDouble(model.getWilg_min()+"d")) {
                     holder.min_soil.setText("Kontrola");
                     holder.min_soil.setTextColor(Color.YELLOW);
+                }else if(actualSoil == 0){
+                        holder.min_soil.setText("Brak danych");
+                        holder.min_soil.setTextColor(Color.BLACK);
                 }else{
                     holder.min_soil.setText("Podlej!");
                     holder.min_soil.setTextColor(Color.RED);
@@ -371,12 +395,41 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+    //SSLContext for making API calls secure
+    private SSLContext getSSLConfig(Context context) throws CertificateException, IOException,
+            KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
+
+        // Loading CAs from an InputStream
+        CertificateFactory cf = null;
+        cf = CertificateFactory.getInstance("X.509");
+
+        Certificate ca;
+        // I'm using Java7. If you used Java6 close it manually with finally.
+        try (InputStream cert = context.getResources().openRawResource(R.raw.certificate_weatherbit)) {
+            ca = cf.generateCertificate(cert);
+        }
+
+        // Creating a KeyStore containing our trusted CAs
+        String keyStoreType = KeyStore.getDefaultType();
+        KeyStore keyStore   = KeyStore.getInstance(keyStoreType);
+        keyStore.load(null, null);
+        keyStore.setCertificateEntry("ca", ca);
+
+        // Creating a TrustManager that trusts the CAs in our KeyStore.
+        String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
+        TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
+        tmf.init(keyStore);
+
+        // Creating an SSLSocketFactory that uses our TrustManager
+        SSLContext sslContext = SSLContext.getInstance("TLS");
+        sslContext.init(null, tmf.getTrustManagers(), null);
+
+        return sslContext;
+    }
+
     private void callForCurrentWeather(double latitude, double longitude){
         //Here Weatherbit.io api is called to get an actual data about weather.
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(CurrentWeatherApi.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        Retrofit retrofit = ApiClient.getClient(getApplicationContext(), CurrentWeatherApi.BASE_URL);
         CurrentWeatherApi api = retrofit.create(CurrentWeatherApi.class);
 
         Call<CurrentWeather> call = api.getCurrentWeather(latitude , longitude);
