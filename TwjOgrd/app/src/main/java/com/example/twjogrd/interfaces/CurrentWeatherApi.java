@@ -12,7 +12,7 @@ public interface CurrentWeatherApi {
 
     String BASE_URL = "https://api.weatherbit.io/v2.0/current/";
 
-    @GET("?key=d89779e647294ffe98db8644d5127f5a")
+    @GET("?key=c32cb0bb4fe645248c5d96ff235b9dcf")
     Call<CurrentWeather> getCurrentWeather(@Query("lat") double lat, @Query("lon") double lon);
 
 
