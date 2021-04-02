@@ -13,7 +13,7 @@ Database also contains some information about plants requirements, thanks to whi
 
 Projekt aplikacji pomagającej w uprawie ogrodu
 
-Aplikacja pobiera pozycję na podstawie GPS i przesyła ją do API pogodowego (weatherbit.io), zwracjąc aktualną temperaturę, wilgotnosc gleby i wiatr.
+Aplikacja pobiera pozycję na podstawie GPS i przesyła ją do API pogodowego (weatherbit.io), zwracjąc aktualną temperaturę, wilgotność gleby i wiatr.
 Pozycję można zapisać, ponieważ ogród nie przemieszcza się razem z użytkownikiem :)
 
 Rośliny wybiera się z listy dostępnej po kliknięciu w zielony plusik na głównym ekranie(profileactivity).
